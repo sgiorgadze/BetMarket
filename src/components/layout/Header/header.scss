@@ -1,0 +1,29 @@
+@import "../../../assets/scss/partials/mixins";
+
+.header {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+  color: red;
+  background-color:$font-color;
+  height: 100px;
+}
+
+.header-part {
+  @include flex-center() ;
+  position: relative;
+  background-color:$font-color;
+  height: 100px;
+  max-width: 1440px;
+
+  margin: 0 auto;
+  padding: 0 32px 0 30px;
+
+}
+//logo
+.logo {
+  img {
+    width: 64px;
+  }
+}

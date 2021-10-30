@@ -1,0 +1,23 @@
+@font-face {
+  font-family: "lbet-mt";
+  src: url("../fonts/LBetSTDMT-Medium.woff2") format("woff2"), url("../fonts/LBetSTDMT-Medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: auto;
+}
+@font-face {
+  font-family: "lbet-std";
+  src: url("../fonts/LBetSTDNus-Light.woff2") format("woff2"), url("../fonts/LBetSTDNus-Light.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: auto;
+}
+@font-face {
+  font-family: "lbet-std";
+  src: url("../fonts/LBetSTDNus-Medium.woff2") format("woff2"), url("../fonts/LBetSTDNus-Medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: auto;
+}
+
+/*# sourceMappingURL=fonts.css.map */

@@ -1,0 +1,46 @@
+// @font-face {
+//   font-family: "lbet-ban";
+//   src: url(/assets/fonts/LBetBannerMt-Bold.woff2) format("woff2"),
+//     url(/assets/fonts/LBetBannerMt-Bold.woff) format("woff");
+//   font-weight: normal;
+//   font-style: normal;
+//   font-display: swap;
+// }
+
+// @font-face {
+//   font-family: "lbet-ban";
+//   src: url(/assets/fonts/LBetBannerMt-Black.woff2) format("woff2"),
+//     url(/assets/fonts/LBetBannerMt-Black.woff) format("woff");
+//   font-weight: bold;
+//   font-style: normal;
+//   font-display: swap;
+// }
+
+@font-face {
+  font-family: "lbet-mt";
+  src: url("../fonts/LBetSTDMT-Medium.woff2") format("woff2"),
+    url("../fonts/LBetSTDMT-Medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: auto;
+
+}
+
+@font-face {
+  font-family: "lbet-std";
+  src: url("../fonts/LBetSTDNus-Light.woff2") format("woff2"),
+    url("../fonts/LBetSTDNus-Light.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: auto;
+}
+
+@font-face {
+  font-family: "lbet-std";
+  src: url("../fonts/LBetSTDNus-Medium.woff2") format("woff2"),
+    url("../fonts/LBetSTDNus-Medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: auto;
+}
+
