@@ -1,14 +1,17 @@
 import React from 'react';
+import CustomRangeSlider from "../RangeSlider"
 import "./offerBlock.scss"
 
 
 const OfferBlock = () => {
+
+
     return (
 
         < div className="offer_box" >
             <div className="offer_title for_web">
                 <h3>შეთავაზებები</h3>
-                <div id="bt-price-range" className="for_web"></div>
+                <CustomRangeSlider />
             </div>
             <div id="regular" className="card_box">
                 <div data-value="1 bonus" className="card_item" style={{ backgroundImage: "url(https://staticdata.lider-bet.com/images/market/12670.png)" }}>
