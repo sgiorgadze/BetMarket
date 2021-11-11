@@ -1,10 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import CustomRangeSlider from "../RangeSlider"
 import "./offerBlock.scss"
+import { useDispatch, useSelector } from 'react-redux';
+import { Actions } from '../../core';
+
+
+
 
 
 const OfferBlock = () => {
+    const dispatch = useDispatch()
+    const [currency, setCurrency] = useState("GEL")
 
+    const { tags, data } = useSelector(store => store.Slot)
+
+    useEffect(() => {
+        getList()
+    }, [currency])
+
+    const getList = () => {
+        dispatch(Actions.Slot.getList({ currency: currency }))
+    }
 
     return (
 

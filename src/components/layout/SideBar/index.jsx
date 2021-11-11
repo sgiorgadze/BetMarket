@@ -17,19 +17,12 @@ const Sidebar = () => {
     const [bura, setBura] = useState(true)
 
 
-
-
-
-
-
-
-
-
-
     const handleMenuItem = (id) => {
         setSelectedItem(id);
         if (selectedItem === id) {
             setActive(!active)
+        } else {
+            setActive(true)
         }
 
     }

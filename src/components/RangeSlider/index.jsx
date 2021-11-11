@@ -14,7 +14,11 @@ const CustomRangeSlider = () => {
     function valueLabelFormat(value) {
         return value.toFixed(2);
     }
-    // console.log(value);
+
+    const styleObj = {
+
+    }
+
     return (
         <div id="bt-price-range" className="for_web">
 
@@ -38,9 +42,7 @@ const CustomRangeSlider = () => {
                         padding: "5px"
 
                     },
-                    // '& .css-1kz0hui-MuiSlider-valueLabel:span:&[data-index="0"]': {
-                    //     background: "Red"
-                    // },
+
                     '& .css-eg0mwd-MuiSlider-thumb:hover': {
                         boxShadow: "none"
                     },

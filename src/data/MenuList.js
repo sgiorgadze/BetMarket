@@ -1,21 +1,21 @@
 const menuList = [
     {
-        id: "29",
+        id: 29,
         title: "TOP",
         isChecked: false
     },
     {
-        id: "30",
+        id: 30,
         title: "ფასდაკლება",
         isChecked: false
     },
     {
-        id: "31",
+        id: 31,
         title: " ბონუსი",
         isChecked: false
     },
     {
-        id: "1",
+        id: 1,
         title: "FREESPIN",
         isChecked: false
     },
