@@ -3,6 +3,12 @@ import CustomRangeSlider from "../RangeSlider"
 import "./offerBlock.scss"
 import { useDispatch, useSelector } from 'react-redux';
 import { Actions } from '../../core';
+//import { getDataList } from "../dataSlice"
+import { slotsDataSelector } from "../../core/store/selectors"
+import { getList } from "../../core/store/actions/slots"
+import { getDataList } from "../../core/store/dataSlice"
+
+
 
 
 
@@ -12,15 +18,39 @@ const OfferBlock = () => {
     const dispatch = useDispatch()
     const [currency, setCurrency] = useState("GEL")
 
-    const { tags, data } = useSelector(store => store.Slot)
+    //const { tags, data } = useSelector(store => store.Slot)
+    const data = useSelector(slotsDataSelector)
+    // useEffect(() => {
+    //     getDataList();
+    // }, [currency])
+
+    // const getDataList = () => {
+    //     const action = Actions.Slot.getList({ currency: currency });
+    //     dispatch(action);
+
+
+    // }
 
     useEffect(() => {
-        getList()
-    }, [currency])
+        getList({ currency: currency }).then(res => {
+            dispatch(getDataList(res.data.data))
+            //console.log(res.data.data[0].discount.end_date);
 
-    const getList = () => {
-        dispatch(Actions.Slot.getList({ currency: currency }))
+
+        })
+    }, [])
+
+    const monthArray = ["იან", "თებ", "მარტ", "აპრ", "მაი", "ივნ", "ივლ", "აგვ", "სექტ", "ოქტ", "ნოე", "დეკ"]
+
+    const getTime = (item) => {
+        let date = new Date(item.discount.end_date).getUTCDate();
+        let month = new Date(item.discount.end_date).getMonth();
+        let hours = new Date(item.discount.end_date).getHours();
+        let minutes = new Date(item.discount.end_date).getMinutes();
+
+        return `${date} ${monthArray[month]}. ${hours}:${minutes}`
     }
+
 
     return (
 
@@ -30,23 +60,25 @@ const OfferBlock = () => {
                 <CustomRangeSlider />
             </div>
             <div id="regular" className="card_box">
-                <div data-value="1 bonus" className="card_item" style={{ backgroundImage: "url(https://staticdata.lider-bet.com/images/market/12670.png)" }}>
-                    <p className="sale-text" data-text="-10%">
-                        <span>29 ნოე. 23:59 </span>
-                    </p>
-                    <div>
-                        <p className="card-title1">Diamond Duke 10.00 GEL BONUS </p>
-                        <p className="card-desc">QUICKSPIN, Diamond Duke 10.00 GEL BONUS </p>
-                        <p className="card-price" data-text="Diamond Duke 10.00 GEL BONUS">
-                            <span>900 GEL </span>
-                            <span className="on" data-text="-10%">1000.00 GEL </span>
+                {data.map(item =>
+                    <div key={item.id} data-value="1 bonus" className="card_item" style={{ backgroundImage: `url(https://staticdata.lider-bet.com/images/market/${item.id}.png)` }}>
+                        <p className="sale-text" data-text={`-${item.discount.percent}%`}>
+                            <span>{getTime(item)} </span>
                         </p>
-                        <div className="card-btns">
-                            <div className="buy">შეძენა</div>
-                            <div className="gift">აჩუქე<br /> მეგობარს</div>
+                        <div>
+                            <p className="card-title1">{item.name} </p>
+                            <p className="card-desc">{item.desc} </p>
+                            <p className="card-price" data-text={item.name}>
+                                <span>{item.discount.new_price} GEL </span>
+                                <span className="on" data-text={`-${item.discount.percent}%`}>{item.price} GEL </span>
+                            </p>
+                            <div className="card-btns">
+                                <div className="buy">შეძენა</div>
+                                <div className="gift">აჩუქე<br /> მეგობარს</div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    </div>)}
+
             </div>
         </div >);
 }

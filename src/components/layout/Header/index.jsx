@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import FilterByPriceBlock from "./FilterByPriceBlock"
 import { useOutsideClick } from '../../../hooks/useEvents';
 import { useWindowSize } from '../../../hooks/useWindowSize';
@@ -7,6 +7,7 @@ import { useWindowSize } from '../../../hooks/useWindowSize';
 import { getMenuList } from "../../../data/MenuList"
 
 import "./header.scss"
+
 
 const Header = () => {
     const size = useWindowSize();
@@ -20,7 +21,7 @@ const Header = () => {
     const [priceFilterData, setPriceFilterData] = useState("")
     const [showPriceFilterBlock, setShowPriceFilterBlock] = useState(false)
 
-    useState(() => {
+    useEffect(() => {
         setData(getMenuList())
     })
 

@@ -2,15 +2,18 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const betMarketInfoSlice = createSlice({
     name: 'BetMarketData',
-    initialState: {},
+    initialState: {
+        data: [],
+        tags: {}
+    },
     reducers: {
-        data(state, { payload }) {
-            //console.log(payload);
+        getDataList(state, { payload }) {
+            console.log(payload);
             //state.userInfo = payload;
         },
 
     }
 });
 
-export const { data } = betMarketInfoSlice.actions;
+export const { getDataList } = betMarketInfoSlice.actions;
 export default betMarketInfoSlice.reducer;

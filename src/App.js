@@ -1,6 +1,6 @@
 import './App.scss';
 import { Provider } from './core'
-import { store } from "./core/store/store"
+import store from "./core/store/store"
 
 import { useWindowSize } from './hooks/useWindowSize';
 
