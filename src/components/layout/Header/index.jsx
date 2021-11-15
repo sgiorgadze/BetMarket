@@ -13,17 +13,14 @@ const Header = () => {
     const size = useWindowSize();
     const optionsRef = useRef(null);
     const [data, setData] = useState([]);
-    // const [top, setTop] = useState(false);
-    // const [sale, setSale] = useState(false);
-    // const [bonus, setBonus] = useState(false);
-    // const [freespin, setFreespin] = useState(false);
+
     const [switchBtn, setSwitchBtn] = useState("GEL")
     const [priceFilterData, setPriceFilterData] = useState("")
     const [showPriceFilterBlock, setShowPriceFilterBlock] = useState(false)
 
     useEffect(() => {
         setData(getMenuList())
-    })
+    }, [])
 
 
     useOutsideClick(optionsRef, () => {
@@ -36,7 +33,6 @@ const Header = () => {
         newdata[index] = { ...data[index] };
         newdata[index].isChecked = !newdata[index].isChecked;
         setData(newdata)
-
     }
 
     const handleSwitchBtn = (name) => {
@@ -71,26 +67,6 @@ const Header = () => {
             </ul>
 
             <ul className="main_section_nav">
-                {/* <li id="29" className={top ? "sort_li section_nav_item for_web active " : "sort_li section_nav_item for_web "}
-                    onClick={() => setTop(!top)}>
-                    <i className="check_icon"></i>
-                    TOP
-                </li>
-                <li id="30" className={sale ? "sort_li section_nav_item for_web active " : "sort_li section_nav_item for_web "}
-                    onClick={() => setSale(!sale)}>
-                    <i className="check_icon"></i>
-                    ფასდაკლება
-                </li>
-                <li id="31" className={bonus ? "sort_li section_nav_item for_web active " : "sort_li section_nav_item for_web "}
-                    onClick={() => setBonus(!bonus)}>
-                    <i className="check_icon"></i>
-                    ბონუსი
-                </li>
-                <li id="1" className={freespin ? "sort_li section_nav_item for_web active " : "sort_li section_nav_item for_web "}
-                    onClick={() => setFreespin(!freespin)}>
-                    <i className="check_icon"></i>
-                    FREESPIN
-                </li> */}
                 {size.width >= 1001 && (data.map(item =>
                     <li id={item.id} key={item.id} className={item.isChecked ? "sort_li section_nav_item for_web active " : "sort_li section_nav_item for_web "}
                         onClick={() => checkMenuItem(item)}

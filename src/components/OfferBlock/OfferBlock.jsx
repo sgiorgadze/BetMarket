@@ -4,9 +4,9 @@ import "./offerBlock.scss"
 import { useDispatch, useSelector } from 'react-redux';
 import { Actions } from '../../core';
 //import { getDataList } from "../dataSlice"
-import { slotsDataSelector } from "../../core/store/selectors"
+import { slotsDataSelector, slotsFilterSelector } from "../../core/store/selectors"
 import { getList } from "../../core/store/actions/slots"
-import { getDataList } from "../../core/store/dataSlice"
+import { getDataList, getFillteredSlots } from "../../core/store/dataSlice"
 
 
 
@@ -18,36 +18,25 @@ const OfferBlock = () => {
     const dispatch = useDispatch()
     const [currency, setCurrency] = useState("GEL")
 
-    //const { tags, data } = useSelector(store => store.Slot)
-    const data = useSelector(slotsDataSelector)
-    // useEffect(() => {
-    //     getDataList();
-    // }, [currency])
+    //const data = useSelector(slotsDataSelector)
+    const filteredSlots = useSelector(slotsFilterSelector)
 
-    // const getDataList = () => {
-    //     const action = Actions.Slot.getList({ currency: currency });
-    //     dispatch(action);
-
-
-    // }
 
     useEffect(() => {
         getList({ currency: currency }).then(res => {
+            dispatch(getFillteredSlots(res.data.data))
             dispatch(getDataList(res.data.data))
-            //console.log(res.data.data[0].discount.end_date);
-
-
-        })
+        });
     }, [])
 
     const monthArray = ["იან", "თებ", "მარტ", "აპრ", "მაი", "ივნ", "ივლ", "აგვ", "სექტ", "ოქტ", "ნოე", "დეკ"]
 
     const getTime = (item) => {
+        console.log(item);
         let date = new Date(item.discount.end_date).getUTCDate();
         let month = new Date(item.discount.end_date).getMonth();
         let hours = new Date(item.discount.end_date).getHours();
         let minutes = new Date(item.discount.end_date).getMinutes();
-
         return `${date} ${monthArray[month]}. ${hours}:${minutes}`
     }
 
@@ -60,8 +49,8 @@ const OfferBlock = () => {
                 <CustomRangeSlider />
             </div>
             <div id="regular" className="card_box">
-                {data.map(item =>
-                    <div key={item.id} data-value="1 bonus" className="card_item" style={{ backgroundImage: `url(https://staticdata.lider-bet.com/images/market/${item.id}.png)` }}>
+                {filteredSlots && filteredSlots.map(item =>
+                    <div key={item.id} id={item.id} data-value="1 bonus" className="card_item" style={{ backgroundImage: `url(https://staticdata.lider-bet.com/images/market/${item.id}.png)` }}>
                         <p className="sale-text" data-text={`-${item.discount.percent}%`}>
                             <span>{getTime(item)} </span>
                         </p>
