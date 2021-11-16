@@ -4,12 +4,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import FilterByPriceBlock from "./FilterByPriceBlock"
 import { useOutsideClick } from '../../../hooks/useEvents';
 import { useWindowSize } from '../../../hooks/useWindowSize';
-import { slotsDataSelector, slotsFilterSelector } from "../../../core/store/selectors"
+import { slotsDataSelector, slotsFilterSelector, slotsIdSelector } from "../../../core/store/selectors"
 
+import { filterSidebarMenu } from "../../../utils/common"
 
 
 import { getMenuList } from "../../../data/MenuList"
-import { getFillteredSlots } from "../../../core/store/dataSlice"
+import { getFillteredSlots, filterHeaderMenuAction } from "../../../core/store/dataSlice"
 
 
 import "./header.scss"
@@ -17,6 +18,8 @@ import "./header.scss"
 
 const Header = () => {
     const dispatch = useDispatch()
+    const slotData = useSelector(slotsDataSelector)
+    const slotsId = useSelector(slotsIdSelector)
 
     const size = useWindowSize();
     const optionsRef = useRef(null);
@@ -51,18 +54,32 @@ const Header = () => {
     }
 
     const filterSlotsData = (item) => {
-        // let filterData = [];
-        // data.map(d => {
-        //     if (d.isChecked) {
-        //         filteredSlots.map(slot => slot.tags.map(sl => {
-        //             if (sl.tag_id === d.id)
-        //                 filterData.push(slot)
-        //         }))
-        //         // dispatch(getFillteredSlots(filterData))
-        //     } 
-        // })
-        // dispatch(getFillteredSlots(filterData))
+        //console.log(slotsId);
+        let filterData = [];
+        data.map(d => {
+            if (d.isChecked) {
+                filterData.push(d.id)
+            }
+        })
+        dispatch(filterHeaderMenuAction(filterSidebarMenu(filterData)));
 
+        //filterDataById(filterData)
+
+
+    }
+
+    const filterDataById = (arrId) => {
+        console.log(slotsId);
+        const newFilteredData = [];
+        for (let i of arrId) {
+            filteredSlots.map(slot => slot.tags.map(s => {
+                if (s.tag_id === i) {
+                    newFilteredData.push(slot)
+                }
+            }))
+
+        }
+        dispatch(getFillteredSlots(newFilteredData))
     }
 
     const handleSwitchBtn = (name) => {

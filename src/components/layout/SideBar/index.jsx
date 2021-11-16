@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSideBarList } from "../../../data/SideBarList"
-import { getFillteredSlots } from "../../../core/store/dataSlice"
-
+import { getFillteredSlots, getFilterId, filterSidebarMenuAction } from "../../../core/store/dataSlice"
+import { filterSidebarMenu } from "../../../utils/common"
 
 import "./sidebar.scss"
 
-import { slotsDataSelector, slotsFilterSelector } from "../../../core/store/selectors"
+import { slotsDataSelector, slotsFilterSelector, slotsIdSelector } from "../../../core/store/selectors"
 import { useEffect } from 'react';
 
 
@@ -16,6 +16,10 @@ const Sidebar = () => {
     const [selectedItem, setSelectedItem] = useState("")
     const [checkedCount, setCheckedCount] = useState(0)
     const [sideBarMenu, setSideBarMenu] = useState([])
+
+    const slotsId = useSelector(slotsIdSelector)
+    const filteredSlots = useSelector(slotsDataSelector)
+
 
 
     useEffect(() => {
@@ -28,20 +32,59 @@ const Sidebar = () => {
 
 
     const handleMenuItem = (item) => {
+        if (item.id === 0) {
+            //return dispatch(getFillteredSlots(data))
+            dispatch(filterSidebarMenuAction(filterSidebarMenu([0])));
+            return dispatch(getFillteredSlots(data))
+        }
         if (selectedItem.id === item.id && selectedItem) {
             setSelectedItem("");
-            handlefilterData(0)
+            dispatch(filterSidebarMenuAction(filterSidebarMenu([0])));
+            dispatch(getFillteredSlots(data))
+
 
         } else {
             setSelectedItem(item);
             let data = [...sideBarMenu];
             data.map(item => item.subCategoty.map(subItem => subItem.isChecked = true))
             setSideBarMenu(data);
-            handlefilterData(item)
+            handleSubItemFilterData(item)
+
 
         }
         setCheckedCount(0);
+
     }
+
+    const handleSubItemFilterData = (item) => {
+        const postArr = []
+
+        if (item.subCategoty.length > 0) {
+            item.subCategoty.map(s => {
+                if (s.isChecked) {
+                    postArr.push(s.id)
+                }
+            })
+        } else {
+            postArr.push(item.id)
+        }
+        dispatch(filterSidebarMenuAction(filterSidebarMenu(postArr)));
+        filterDataById(postArr)
+    }
+
+    const filterDataById = (arrId) => {
+        const newFilteredData = [];
+        for (let i of arrId) {
+            filteredSlots.map(slot => slot.tags.map(s => {
+                if (s.tag_id === i) {
+                    newFilteredData.push(slot)
+                }
+            }))
+
+        }
+        dispatch(getFillteredSlots(newFilteredData))
+    }
+
 
 
     const checkSubMenuItem = (id, subItem) => {
@@ -69,65 +112,37 @@ const Sidebar = () => {
 
     }
 
+
+
+
+
     // const handlefilterData = (item) => {
     //     let filterData = [];
-    //     data.map(slot => slot.tags.map(sl => {
-    //         if (sl.tag_id === item.id) {
-    //             filterData.push(slot)
-    //         }
-    //     }))
-    //     if (filterData.length > 0) {
-    //         dispatch(getFillteredSlots(filterData))
-    //     } else {
-    //         dispatch(getFillteredSlots(data))
-
+    //     // let newData = data.filter(slot => slot.tags.map(sl => sl.tag_id === item.id
+    //     // ))
+    //     // console.log(newData);
+    //     if (item.id === 0) {
+    //         return dispatch(getFillteredSlots(data))
     //     }
-    // }
+    //     if (item.subCategoty.length === 0) {
+    //         data.map(slot => slot.tags.map(sl => {
+    //             if (sl.tag_id === item.id) {
+    //                 filterData.push(slot)
+    //             }
 
-
-    // const handleSubItemFilterData = (item) => {
-    //     let subItemFilterData = [];
+    //         }))
+    //         return dispatch(getFillteredSlots(filterData))
+    //     }
     //     item.subCategoty.map(item => {
     //         if (item.isChecked) {
     //             data.map(slot => slot.tags.map(sl => {
     //                 if (sl.tag_id === item.id)
-    //                     subItemFilterData.push(slot)
-
+    //                     filterData.push(slot)
     //             }))
     //         }
     //     })
-    //     dispatch(getFillteredSlots(subItemFilterData))
-
+    //     dispatch(getFillteredSlots(filterData))
     // }
-
-
-    const handlefilterData = (item) => {
-        let filterData = [];
-        // let newData = data.filter(slot => slot.tags.map(sl => sl.tag_id === item.id
-        // ))
-        // console.log(newData);
-        if (item.id === 0) {
-            return dispatch(getFillteredSlots(data))
-        }
-        if (item.subCategoty.length === 0) {
-            data.map(slot => slot.tags.map(sl => {
-                if (sl.tag_id === item.id) {
-                    filterData.push(slot)
-                }
-
-            }))
-            return dispatch(getFillteredSlots(filterData))
-        }
-        item.subCategoty.map(item => {
-            if (item.isChecked) {
-                data.map(slot => slot.tags.map(sl => {
-                    if (sl.tag_id === item.id)
-                        filterData.push(slot)
-                }))
-            }
-        })
-        dispatch(getFillteredSlots(filterData))
-    }
 
     return (
         <section className="section_box sidebar">
@@ -146,7 +161,8 @@ const Sidebar = () => {
                                 <li key={subItem.id} id={subItem.id}
                                     onClick={() => {
                                         checkSubMenuItem(item.id, subItem);
-                                        handlefilterData(item)
+                                        //handlefilterData(item)
+                                        handleSubItemFilterData(item)
                                     }}
                                     className={subItem.isChecked ? "bind sub_menu_item active" : "bind sub_menu_item"}
                                 >

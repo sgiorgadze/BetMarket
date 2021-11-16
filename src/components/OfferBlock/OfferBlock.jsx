@@ -4,7 +4,7 @@ import "./offerBlock.scss"
 import { useDispatch, useSelector } from 'react-redux';
 import { Actions } from '../../core';
 //import { getDataList } from "../dataSlice"
-import { slotsDataSelector, slotsFilterSelector } from "../../core/store/selectors"
+import { slotsDataSelector, slotsFilterSelector, slotsIdSelector } from "../../core/store/selectors"
 import { getList } from "../../core/store/actions/slots"
 import { getDataList, getFillteredSlots } from "../../core/store/dataSlice"
 
@@ -18,8 +18,54 @@ const OfferBlock = () => {
     const dispatch = useDispatch()
     const [currency, setCurrency] = useState("GEL")
 
-    //const data = useSelector(slotsDataSelector)
+    const data = useSelector(slotsDataSelector)
     const filteredSlots = useSelector(slotsFilterSelector)
+    const slotsId = useSelector(slotsIdSelector)
+
+
+    const filterDataById = (arrId, filterArr) => {
+        //console.log(arrId, filterArr);
+        let newFilteredData = [];
+        for (let i of arrId) {
+            console.log(i);
+            if (i === 29) {
+                newFilteredData = []
+                filterArr.map(slot => slot.tags.map(s => {
+                    if (s.tag_id === 29) {
+                        newFilteredData.push(slot)
+
+                    }
+                }))
+                dispatch(getFillteredSlots(newFilteredData))
+            }
+            else {
+                console.log("aq ratoga??");
+                data.map(slot => slot.tags.map(s => {
+                    if (s.tag_id === i) {
+                        newFilteredData.push(slot)
+
+                    }
+                }))
+
+            }
+        }
+        dispatch(getFillteredSlots(newFilteredData))
+        // for (let i of arrId) {
+        //     filterArr.map(slot => slot.tags.map(s => {
+        //         // console.log(s.tag_id, i);
+        //         if (s.tag_id === i) {
+        //             if (!newFilteredData.includes(slot)) {
+        //                 newFilteredData.push(slot)
+
+        //             }
+
+        //         }
+        //     }))
+
+        // }
+        //console.log(newFilteredData);
+        //dispatch(getFillteredSlots(newFilteredData))
+    }
 
 
     useEffect(() => {
@@ -27,7 +73,12 @@ const OfferBlock = () => {
             dispatch(getFillteredSlots(res.data.data))
             dispatch(getDataList(res.data.data))
         });
+
     }, [])
+
+    useEffect(() => {
+        filterDataById(slotsId, filteredSlots)
+    }, [slotsId])
 
     const monthArray = ["იან", "თებ", "მარტ", "აპრ", "მაი", "ივნ", "ივლ", "აგვ", "სექტ", "ოქტ", "ნოე", "დეკ"]
 
