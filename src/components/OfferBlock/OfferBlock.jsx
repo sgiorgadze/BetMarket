@@ -32,7 +32,6 @@ const OfferBlock = () => {
     const monthArray = ["იან", "თებ", "მარტ", "აპრ", "მაი", "ივნ", "ივლ", "აგვ", "სექტ", "ოქტ", "ნოე", "დეკ"]
 
     const getTime = (item) => {
-        console.log(item);
         let date = new Date(item.discount.end_date).getUTCDate();
         let month = new Date(item.discount.end_date).getMonth();
         let hours = new Date(item.discount.end_date).getHours();

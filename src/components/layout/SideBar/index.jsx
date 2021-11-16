@@ -24,7 +24,7 @@ const Sidebar = () => {
 
 
     const data = useSelector(slotsDataSelector)
-    const filteredSlots = useSelector(slotsFilterSelector)
+    //const filteredSlots = useSelector(slotsFilterSelector)
 
 
     const handleMenuItem = (item) => {
@@ -45,7 +45,6 @@ const Sidebar = () => {
 
 
     const checkSubMenuItem = (id, subItem) => {
-        //console.log(subItem);
         let newMenudata = [...sideBarMenu];
         newMenudata.map((item) => {
             if (item.id === id && checkedCount === 0) {
@@ -70,37 +69,65 @@ const Sidebar = () => {
 
     }
 
+    // const handlefilterData = (item) => {
+    //     let filterData = [];
+    //     data.map(slot => slot.tags.map(sl => {
+    //         if (sl.tag_id === item.id) {
+    //             filterData.push(slot)
+    //         }
+    //     }))
+    //     if (filterData.length > 0) {
+    //         dispatch(getFillteredSlots(filterData))
+    //     } else {
+    //         dispatch(getFillteredSlots(data))
+
+    //     }
+    // }
+
+
+    // const handleSubItemFilterData = (item) => {
+    //     let subItemFilterData = [];
+    //     item.subCategoty.map(item => {
+    //         if (item.isChecked) {
+    //             data.map(slot => slot.tags.map(sl => {
+    //                 if (sl.tag_id === item.id)
+    //                     subItemFilterData.push(slot)
+
+    //             }))
+    //         }
+    //     })
+    //     dispatch(getFillteredSlots(subItemFilterData))
+
+    // }
+
+
     const handlefilterData = (item) => {
         let filterData = [];
-        data.map(slot => slot.tags.map(sl => {
-            if (sl.tag_id === item.id) {
-                filterData.push(slot)
-            }
-        }))
-        if (filterData.length > 0) {
-            dispatch(getFillteredSlots(filterData))
-        } else {
-            dispatch(getFillteredSlots(data))
-
+        // let newData = data.filter(slot => slot.tags.map(sl => sl.tag_id === item.id
+        // ))
+        // console.log(newData);
+        if (item.id === 0) {
+            return dispatch(getFillteredSlots(data))
         }
-    }
+        if (item.subCategoty.length === 0) {
+            data.map(slot => slot.tags.map(sl => {
+                if (sl.tag_id === item.id) {
+                    filterData.push(slot)
+                }
 
-
-    const handleSubItemFilterData = (item) => {
-        let subItemFilterData = [];
+            }))
+            return dispatch(getFillteredSlots(filterData))
+        }
         item.subCategoty.map(item => {
             if (item.isChecked) {
                 data.map(slot => slot.tags.map(sl => {
                     if (sl.tag_id === item.id)
-                        subItemFilterData.push(slot)
-
+                        filterData.push(slot)
                 }))
             }
         })
-        dispatch(getFillteredSlots(subItemFilterData))
-
+        dispatch(getFillteredSlots(filterData))
     }
-
 
     return (
         <section className="section_box sidebar">
@@ -119,7 +146,7 @@ const Sidebar = () => {
                                 <li key={subItem.id} id={subItem.id}
                                     onClick={() => {
                                         checkSubMenuItem(item.id, subItem);
-                                        handleSubItemFilterData(item)
+                                        handlefilterData(item)
                                     }}
                                     className={subItem.isChecked ? "bind sub_menu_item active" : "bind sub_menu_item"}
                                 >

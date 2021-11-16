@@ -1,15 +1,23 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import FilterByPriceBlock from "./FilterByPriceBlock"
 import { useOutsideClick } from '../../../hooks/useEvents';
 import { useWindowSize } from '../../../hooks/useWindowSize';
+import { slotsDataSelector, slotsFilterSelector } from "../../../core/store/selectors"
+
 
 
 import { getMenuList } from "../../../data/MenuList"
+import { getFillteredSlots } from "../../../core/store/dataSlice"
+
 
 import "./header.scss"
 
 
 const Header = () => {
+    const dispatch = useDispatch()
+
     const size = useWindowSize();
     const optionsRef = useRef(null);
     const [data, setData] = useState([]);
@@ -17,6 +25,8 @@ const Header = () => {
     const [switchBtn, setSwitchBtn] = useState("GEL")
     const [priceFilterData, setPriceFilterData] = useState("")
     const [showPriceFilterBlock, setShowPriceFilterBlock] = useState(false)
+
+    const filteredSlots = useSelector(slotsFilterSelector)
 
     useEffect(() => {
         setData(getMenuList())
@@ -29,10 +39,30 @@ const Header = () => {
 
     const checkMenuItem = (item) => {
         const newdata = [...data];
-        const index = data.indexOf(item);
-        newdata[index] = { ...data[index] };
-        newdata[index].isChecked = !newdata[index].isChecked;
-        setData(newdata)
+        // const index = data.indexOf(item);
+        // newdata[index] = { ...data[index] };
+        // newdata[index].isChecked = !newdata[index].isChecked;
+        newdata.map(i => {
+            if (i.id === item.id) {
+                i.isChecked = !i.isChecked
+            }
+        })
+        setData(newdata);
+    }
+
+    const filterSlotsData = (item) => {
+        // let filterData = [];
+        // data.map(d => {
+        //     if (d.isChecked) {
+        //         filteredSlots.map(slot => slot.tags.map(sl => {
+        //             if (sl.tag_id === d.id)
+        //                 filterData.push(slot)
+        //         }))
+        //         // dispatch(getFillteredSlots(filterData))
+        //     } 
+        // })
+        // dispatch(getFillteredSlots(filterData))
+
     }
 
     const handleSwitchBtn = (name) => {
@@ -68,8 +98,12 @@ const Header = () => {
 
             <ul className="main_section_nav">
                 {size.width >= 1001 && (data.map(item =>
-                    <li id={item.id} key={item.id} className={item.isChecked ? "sort_li section_nav_item for_web active " : "sort_li section_nav_item for_web "}
-                        onClick={() => checkMenuItem(item)}
+                    <li id={item.id} key={item.id}
+                        onClick={() => {
+                            checkMenuItem(item);
+                            filterSlotsData(item)
+                        }}
+                        className={item.isChecked ? "sort_li section_nav_item for_web active " : "sort_li section_nav_item for_web "}
                     >
                         <i className="check_icon"></i>
                         {item.title}
