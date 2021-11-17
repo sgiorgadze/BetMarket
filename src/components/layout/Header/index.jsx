@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import FilterByPriceBlock from "./FilterByPriceBlock"
 import { useOutsideClick } from '../../../hooks/useEvents';
 import { useWindowSize } from '../../../hooks/useWindowSize';
-import { slotsDataSelector, slotsFilterSelector, slotsIdSelector } from "../../../core/store/selectors"
+import { slotsDataSelector, slotsFilterSelector, sideBarIdSelector, headerIdSelector } from "../../../core/store/selectors"
 
 import { filterSidebarMenu } from "../../../utils/common"
 
@@ -18,8 +18,9 @@ import "./header.scss"
 
 const Header = () => {
     const dispatch = useDispatch()
-    const slotData = useSelector(slotsDataSelector)
-    const slotsId = useSelector(slotsIdSelector)
+    // const slotData = useSelector(slotsDataSelector)
+    //const slotsId = useSelector(headerIdSelector)
+    const filteredSlots = useSelector(slotsFilterSelector)
 
     const size = useWindowSize();
     const optionsRef = useRef(null);
@@ -29,7 +30,6 @@ const Header = () => {
     const [priceFilterData, setPriceFilterData] = useState("")
     const [showPriceFilterBlock, setShowPriceFilterBlock] = useState(false)
 
-    const filteredSlots = useSelector(slotsFilterSelector)
 
     useEffect(() => {
         setData(getMenuList())
@@ -69,7 +69,7 @@ const Header = () => {
     }
 
     const filterDataById = (arrId) => {
-        console.log(slotsId);
+        //console.log(slotsId);
         const newFilteredData = [];
         for (let i of arrId) {
             filteredSlots.map(slot => slot.tags.map(s => {

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSideBarList } from "../../../data/SideBarList"
-import { getFillteredSlots, getFilterId, filterSidebarMenuAction } from "../../../core/store/dataSlice"
+import { getFillteredSlots, getSideBarId, getHeaderId, filterSidebarMenuAction } from "../../../core/store/dataSlice"
 import { filterSidebarMenu } from "../../../utils/common"
 
 import "./sidebar.scss"
 
-import { slotsDataSelector, slotsFilterSelector, slotsIdSelector } from "../../../core/store/selectors"
+import { slotsDataSelector, sideBarIdSelector, slotsFilterSelector, headerIdSelector } from "../../../core/store/selectors"
 import { useEffect } from 'react';
 
 
@@ -17,8 +17,10 @@ const Sidebar = () => {
     const [checkedCount, setCheckedCount] = useState(0)
     const [sideBarMenu, setSideBarMenu] = useState([])
 
-    const slotsId = useSelector(slotsIdSelector)
-    const filteredSlots = useSelector(slotsDataSelector)
+    const slotsId = useSelector(sideBarIdSelector)
+    const filteredSlots = useSelector(slotsFilterSelector)
+    const data = useSelector(slotsDataSelector)
+
 
 
 
@@ -27,13 +29,11 @@ const Sidebar = () => {
     }, [])
 
 
-    const data = useSelector(slotsDataSelector)
     //const filteredSlots = useSelector(slotsFilterSelector)
 
 
     const handleMenuItem = (item) => {
         if (item.id === 0) {
-            //return dispatch(getFillteredSlots(data))
             dispatch(filterSidebarMenuAction(filterSidebarMenu([0])));
             return dispatch(getFillteredSlots(data))
         }
@@ -75,7 +75,7 @@ const Sidebar = () => {
     const filterDataById = (arrId) => {
         const newFilteredData = [];
         for (let i of arrId) {
-            filteredSlots.map(slot => slot.tags.map(s => {
+            data.map(slot => slot.tags.map(s => {
                 if (s.tag_id === i) {
                     newFilteredData.push(slot)
                 }
@@ -116,33 +116,7 @@ const Sidebar = () => {
 
 
 
-    // const handlefilterData = (item) => {
-    //     let filterData = [];
-    //     // let newData = data.filter(slot => slot.tags.map(sl => sl.tag_id === item.id
-    //     // ))
-    //     // console.log(newData);
-    //     if (item.id === 0) {
-    //         return dispatch(getFillteredSlots(data))
-    //     }
-    //     if (item.subCategoty.length === 0) {
-    //         data.map(slot => slot.tags.map(sl => {
-    //             if (sl.tag_id === item.id) {
-    //                 filterData.push(slot)
-    //             }
 
-    //         }))
-    //         return dispatch(getFillteredSlots(filterData))
-    //     }
-    //     item.subCategoty.map(item => {
-    //         if (item.isChecked) {
-    //             data.map(slot => slot.tags.map(sl => {
-    //                 if (sl.tag_id === item.id)
-    //                     filterData.push(slot)
-    //             }))
-    //         }
-    //     })
-    //     dispatch(getFillteredSlots(filterData))
-    // }
 
     return (
         <section className="section_box sidebar">

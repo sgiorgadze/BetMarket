@@ -4,9 +4,9 @@ import "./offerBlock.scss"
 import { useDispatch, useSelector } from 'react-redux';
 import { Actions } from '../../core';
 //import { getDataList } from "../dataSlice"
-import { slotsDataSelector, slotsFilterSelector, slotsIdSelector } from "../../core/store/selectors"
+import { slotsDataSelector, slotsFilterSelector, sideBarIdSelector, headerIdSelector, allIdSelector, SlotsByHeaderSelector } from "../../core/store/selectors"
 import { getList } from "../../core/store/actions/slots"
-import { getDataList, getFillteredSlots } from "../../core/store/dataSlice"
+import { getDataList, getFillteredSlots, getSideBarId, getHeaderId, getAllId, getFillteredSlotsByHeader } from "../../core/store/dataSlice"
 
 
 
@@ -20,51 +20,52 @@ const OfferBlock = () => {
 
     const data = useSelector(slotsDataSelector)
     const filteredSlots = useSelector(slotsFilterSelector)
-    const slotsId = useSelector(slotsIdSelector)
+    const sideBarFilterId = useSelector(sideBarIdSelector)
+    const headerFilterId = useSelector(headerIdSelector)
+    const allId = useSelector(allIdSelector)
+    const fillteredSlotsByheader = useSelector(SlotsByHeaderSelector)
 
 
-    const filterDataById = (arrId, filterArr) => {
-        //console.log(arrId, filterArr);
-        let newFilteredData = [];
-        for (let i of arrId) {
-            console.log(i);
-            if (i === 29) {
-                newFilteredData = []
-                filterArr.map(slot => slot.tags.map(s => {
-                    if (s.tag_id === 29) {
-                        newFilteredData.push(slot)
+    const filter = (arr, x) => {
+        let y = [];
+        arr.map(slot => slot.tags.map(s => {
+            if (s.tag_id === x) {
+                y.push(slot)
 
-                    }
-                }))
-                dispatch(getFillteredSlots(newFilteredData))
             }
-            else {
-                console.log("aq ratoga??");
+        }))
+
+        return y;
+
+    }
+
+
+    const filterDataById = (headerFilterId, filteredSlotsArr, sideBarFilterId, fillteredSlotsByheader) => {
+        if (headerFilterId.length > 0) {
+            let a = filteredSlotsArr
+            for (let i of headerFilterId) {
+                a = filter(a, i)
+            }
+            dispatch(getFillteredSlotsByHeader(a))
+        } else {
+            console.log("chatvurta");
+            const newFilteredData = [];
+            for (let i of sideBarFilterId) {
                 data.map(slot => slot.tags.map(s => {
                     if (s.tag_id === i) {
                         newFilteredData.push(slot)
-
                     }
                 }))
 
             }
+            dispatch(getFillteredSlots(newFilteredData))
+            dispatch(getFillteredSlotsByHeader(newFilteredData))
         }
-        dispatch(getFillteredSlots(newFilteredData))
-        // for (let i of arrId) {
-        //     filterArr.map(slot => slot.tags.map(s => {
-        //         // console.log(s.tag_id, i);
-        //         if (s.tag_id === i) {
-        //             if (!newFilteredData.includes(slot)) {
-        //                 newFilteredData.push(slot)
-
-        //             }
-
-        //         }
-        //     }))
-
+        // let a = filteredSlotsArr
+        // for (let i of headerFilterId) {
+        //     a = filter(a, i)
         // }
-        //console.log(newFilteredData);
-        //dispatch(getFillteredSlots(newFilteredData))
+        //console.log(a);
     }
 
 
@@ -72,13 +73,15 @@ const OfferBlock = () => {
         getList({ currency: currency }).then(res => {
             dispatch(getFillteredSlots(res.data.data))
             dispatch(getDataList(res.data.data))
+            dispatch(getFillteredSlotsByHeader(res.data.data))
         });
 
     }, [])
 
     useEffect(() => {
-        filterDataById(slotsId, filteredSlots)
-    }, [slotsId])
+        filterDataById(headerFilterId, filteredSlots, sideBarFilterId, fillteredSlotsByheader)
+        // console.log(headerFilterId);
+    }, [allId])
 
     const monthArray = ["იან", "თებ", "მარტ", "აპრ", "მაი", "ივნ", "ივლ", "აგვ", "სექტ", "ოქტ", "ნოე", "დეკ"]
 
@@ -99,7 +102,7 @@ const OfferBlock = () => {
                 <CustomRangeSlider />
             </div>
             <div id="regular" className="card_box">
-                {filteredSlots && filteredSlots.map(item =>
+                {fillteredSlotsByheader && fillteredSlotsByheader.map(item =>
                     <div key={item.id} id={item.id} data-value="1 bonus" className="card_item" style={{ backgroundImage: `url(https://staticdata.lider-bet.com/images/market/${item.id}.png)` }}>
                         <p className="sale-text" data-text={`-${item.discount.percent}%`}>
                             <span>{getTime(item)} </span>
