@@ -1,16 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import FilterByPriceBlock from "./FilterByPriceBlock"
 import { useOutsideClick } from '../../../hooks/useEvents';
 import { useWindowSize } from '../../../hooks/useWindowSize';
-import { slotsDataSelector, slotsFilterSelector, sideBarIdSelector, headerIdSelector } from "../../../core/store/selectors"
 
+import { slotsFilterSelector, SlotsByHeaderSelector, allIdSelector, sortedPropSelector } from "../../../core/store/selectors"
+import { getDataList, getFillteredSlots, filterHeaderMenuAction, getFillteredSlotsByHeader, getSortedProp } from "../../../core/store/dataSlice"
 import { filterSidebarMenu } from "../../../utils/common"
 
-
+import FilterByPriceBlock from "./FilterByPriceBlock"
 import { getMenuList } from "../../../data/MenuList"
-import { getFillteredSlots, filterHeaderMenuAction } from "../../../core/store/dataSlice"
+
+import { getList } from "../../../core/store/actions/slots"
 
 
 import "./header.scss"
@@ -18,22 +19,39 @@ import "./header.scss"
 
 const Header = () => {
     const dispatch = useDispatch()
-    // const slotData = useSelector(slotsDataSelector)
-    //const slotsId = useSelector(headerIdSelector)
-    const filteredSlots = useSelector(slotsFilterSelector)
+    // const filteredSlots = useSelector(slotsFilterSelector)
+    // const fillteredSlotsByheader = useSelector(SlotsByHeaderSelector)
+    // const allId = useSelector(allIdSelector)
+
+
 
     const size = useWindowSize();
     const optionsRef = useRef(null);
     const [data, setData] = useState([]);
 
     const [switchBtn, setSwitchBtn] = useState("GEL")
-    const [priceFilterData, setPriceFilterData] = useState("")
+    const [priceFilterData, setPriceFilterData] = useState("down")
     const [showPriceFilterBlock, setShowPriceFilterBlock] = useState(false)
 
+
+    const [currency, setCurrency] = useState("GEL")
+    //const sortedProp = useSelector(sortedPropSelector)
+
+
+    useEffect(() => {
+        getList({ currency: currency }).then(res => {
+            dispatch(getFillteredSlots(res.data.data))
+            dispatch(getDataList(res.data.data))
+            dispatch(getFillteredSlotsByHeader(res.data.data))
+        });
+
+    }, [])
 
     useEffect(() => {
         setData(getMenuList())
     }, [])
+
+
 
 
     useOutsideClick(optionsRef, () => {
@@ -42,9 +60,6 @@ const Header = () => {
 
     const checkMenuItem = (item) => {
         const newdata = [...data];
-        // const index = data.indexOf(item);
-        // newdata[index] = { ...data[index] };
-        // newdata[index].isChecked = !newdata[index].isChecked;
         newdata.map(i => {
             if (i.id === item.id) {
                 i.isChecked = !i.isChecked
@@ -54,7 +69,6 @@ const Header = () => {
     }
 
     const filterSlotsData = (item) => {
-        //console.log(slotsId);
         let filterData = [];
         data.map(d => {
             if (d.isChecked) {
@@ -62,25 +76,8 @@ const Header = () => {
             }
         })
         dispatch(filterHeaderMenuAction(filterSidebarMenu(filterData)));
-
-        //filterDataById(filterData)
-
-
     }
 
-    const filterDataById = (arrId) => {
-        //console.log(slotsId);
-        const newFilteredData = [];
-        for (let i of arrId) {
-            filteredSlots.map(slot => slot.tags.map(s => {
-                if (s.tag_id === i) {
-                    newFilteredData.push(slot)
-                }
-            }))
-
-        }
-        dispatch(getFillteredSlots(newFilteredData))
-    }
 
     const handleSwitchBtn = (name) => {
         if (name === "GEL") {
@@ -94,9 +91,10 @@ const Header = () => {
         e.stopPropagation();
         if (priceFilterData === section) {
             setPriceFilterData("")
+            dispatch(getSortedProp(""));
         } else {
             setPriceFilterData(section)
-
+            dispatch(getSortedProp(section));
         }
 
     }

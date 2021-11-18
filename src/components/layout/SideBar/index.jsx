@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSideBarList } from "../../../data/SideBarList"
-import { getFillteredSlots, getSideBarId, getHeaderId, filterSidebarMenuAction } from "../../../core/store/dataSlice"
+
+import { slotsDataSelector } from "../../../core/store/selectors"
+import { getFillteredSlots, filterSidebarMenuAction } from "../../../core/store/dataSlice"
 import { filterSidebarMenu } from "../../../utils/common"
+import { getSideBarList } from "../../../data/SideBarList"
 
 import "./sidebar.scss"
-
-import { slotsDataSelector, sideBarIdSelector, slotsFilterSelector, headerIdSelector } from "../../../core/store/selectors"
-import { useEffect } from 'react';
-
 
 
 const Sidebar = () => {
@@ -17,11 +15,8 @@ const Sidebar = () => {
     const [checkedCount, setCheckedCount] = useState(0)
     const [sideBarMenu, setSideBarMenu] = useState([])
 
-    const slotsId = useSelector(sideBarIdSelector)
-    const filteredSlots = useSelector(slotsFilterSelector)
+
     const data = useSelector(slotsDataSelector)
-
-
 
 
     useEffect(() => {
@@ -29,11 +24,9 @@ const Sidebar = () => {
     }, [])
 
 
-    //const filteredSlots = useSelector(slotsFilterSelector)
-
-
     const handleMenuItem = (item) => {
         if (item.id === 0) {
+            setSelectedItem(item);
             dispatch(filterSidebarMenuAction(filterSidebarMenu([0])));
             return dispatch(getFillteredSlots(data))
         }
@@ -113,11 +106,6 @@ const Sidebar = () => {
     }
 
 
-
-
-
-
-
     return (
         <section className="section_box sidebar">
             <div className="user_box"></div>
@@ -135,7 +123,6 @@ const Sidebar = () => {
                                 <li key={subItem.id} id={subItem.id}
                                     onClick={() => {
                                         checkSubMenuItem(item.id, subItem);
-                                        //handlefilterData(item)
                                         handleSubItemFilterData(item)
                                     }}
                                     className={subItem.isChecked ? "bind sub_menu_item active" : "bind sub_menu_item"}
