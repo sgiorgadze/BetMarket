@@ -41,6 +41,15 @@ const OfferBlock = () => {
 
     const filterSlotBySlider = (arr) => {
         //console.log(filterBySlider, arr);
+
+        if (filterBySlider) {
+            let sortedArr = arr.filter(slot =>
+                slot.discount.new_price >= filterBySlider[0] && slot.discount.new_price <= filterBySlider[1])
+            console.log(sortedArr);
+            dispatch(getFillteredSlotsByHeader(sortedArr))
+        }
+
+
     }
 
 
@@ -50,29 +59,31 @@ const OfferBlock = () => {
         if (sortedProp === "az") {
             let sortedSlots = sortedrArr.sort((a, b) => (a.name > b.name ? 1 : -1));
             filterSlotBySlider(sortedSlots)
-            dispatch(getFillteredSlotsByHeader(sortedSlots))
+            //dispatch(getFillteredSlotsByHeader(sortedSlots))
         }
         if (sortedProp === "za") {
             let sortedSlots = sortedrArr.sort((a, b) => (a.name < b.name ? 1 : -1));
             filterSlotBySlider(sortedSlots)
-            dispatch(getFillteredSlotsByHeader(sortedSlots))
+            //dispatch(getFillteredSlotsByHeader(sortedSlots))
 
         }
         if (sortedProp === "up") {
             let sortedSlots = sortedrArr.sort((a, b) => a.price - b.price);
             filterSlotBySlider(sortedSlots)
-            dispatch(getFillteredSlotsByHeader(sortedSlots))
+            //dispatch(getFillteredSlotsByHeader(sortedSlots))
 
         }
         if (sortedProp === "down") {
+            console.log("axla");
             let sortedSlots = sortedrArr.sort((a, b) => b.price - a.price);
             filterSlotBySlider(sortedSlots)
-            dispatch(getFillteredSlotsByHeader(sortedSlots))
+            // dispatch(getFillteredSlotsByHeader(sortedSlots))
 
 
         }
         if (sortedProp === "") {
-            dispatch(getFillteredSlotsByHeader(arr))
+            filterSlotBySlider(arr)
+            //dispatch(getFillteredSlotsByHeader(arr))
 
         }
     }
