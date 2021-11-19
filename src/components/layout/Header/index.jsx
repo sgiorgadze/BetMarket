@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useOutsideClick } from '../../../hooks/useEvents';
 import { useWindowSize } from '../../../hooks/useWindowSize';
 
-import { slotsFilterSelector, SlotsByHeaderSelector, allIdSelector, sortedPropSelector } from "../../../core/store/selectors"
-import { getDataList, getFillteredSlots, filterHeaderMenuAction, getFillteredSlotsByHeader, getSortedProp } from "../../../core/store/dataSlice"
+import { slotsFilterSelector, SlotsByHeaderSelector, allIdSelector, sortedPropSelector, currencySelector } from "../../../core/store/selectors"
+import { getDataList, getFillteredSlots, filterHeaderMenuAction, getCurrency, getFillteredSlotsByHeader, getSortedProp } from "../../../core/store/dataSlice"
 import { filterSidebarMenu } from "../../../utils/common"
 
 import FilterByPriceBlock from "./FilterByPriceBlock"
@@ -34,9 +34,9 @@ const Header = () => {
     const [showPriceFilterBlock, setShowPriceFilterBlock] = useState(false)
 
 
-    const [currency, setCurrency] = useState("GEL")
+    //const [currency, setCurrency] = useState("GEL")
     //const sortedProp = useSelector(sortedPropSelector)
-
+    const currency = useSelector(currencySelector)
 
     useEffect(() => {
         getList({ currency: currency }).then(res => {
@@ -81,9 +81,9 @@ const Header = () => {
 
     const handleSwitchBtn = (name) => {
         if (name === "GEL") {
-            setSwitchBtn("POINTS")
+            dispatch(getCurrency("POINTS"))
         } else {
-            setSwitchBtn("GEL")
+            dispatch(getCurrency("GEL"))
         }
 
     }
@@ -125,9 +125,9 @@ const Header = () => {
                     </li>)
                 )}
 
-                <li data-id={switchBtn} className="section_nav_item switch_btn">
+                <li data-id={currency} className="section_nav_item switch_btn">
                     <span data-currency="POINTS" className="switch_item">ქულა</span>
-                    <span className="switch_img" onClick={() => handleSwitchBtn(switchBtn)}> </span>
+                    <span className="switch_img" onClick={() => handleSwitchBtn(currency)}> </span>
                     <span data-currency="GEL" className="switch_item">ლარი</span>
                 </li>
                 <li id="select-box" className=" section_nav_item custom-select for-mob">
@@ -148,7 +148,7 @@ const Header = () => {
                     className={showPriceFilterBlock ? "section_nav_item open" : "section_nav_item"}
                     ref={optionsRef}
                     onClick={() => handleShowPriceFilterBlock()}>
-                    <FilterByPriceBlock handlePriceFilterData={handlePriceFilterData} />
+                    <FilterByPriceBlock handlePriceFilterData={handlePriceFilterData} currency={switchBtn} />
                 </li>
                 <li id="market-info" data-info="ბეთმარკეტის წესები" className="section-nav-item">
                     <a href="/"> </a>

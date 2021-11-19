@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react';
 import CustomRangeSlider from "../RangeSlider"
 import { useDispatch, useSelector } from 'react-redux';
 
-import { slotsDataSelector, slotsFilterSelector, sideBarIdSelector, headerIdSelector, allIdSelector, SlotsByHeaderSelector, sortedPropSelector } from "../../core/store/selectors"
-import { getDataList, getFillteredSlots, getFillteredSlotsByHeader } from "../../core/store/dataSlice"
+import { slotsDataSelector, slotsFilterSelector, sideBarIdSelector, headerIdSelector, allIdSelector, currencySelector, SlotsByHeaderSelector, sortedPropSelector, filterBySliderSelector } from "../../core/store/selectors"
+import { getDataList, getCurrency, getFillteredSlots, getFillteredSlotsByHeader } from "../../core/store/dataSlice"
 import { getList } from "../../core/store/actions/slots"
 
 import "./offerBlock.scss"
 
 const OfferBlock = () => {
     const dispatch = useDispatch()
-    const [currency, setCurrency] = useState("GEL")
+    //const [currency, setCurrency] = useState("GEL")
 
     const data = useSelector(slotsDataSelector)
     const filteredSlots = useSelector(slotsFilterSelector)
@@ -19,6 +19,12 @@ const OfferBlock = () => {
     const allId = useSelector(allIdSelector)
     const fillteredSlotsByheader = useSelector(SlotsByHeaderSelector)
     const sortedProp = useSelector(sortedPropSelector)
+    const filterBySlider = useSelector(filterBySliderSelector)
+
+    const currency = useSelector(currencySelector)
+
+    const arr1 = [0, 1000];
+    const arr2 = [0, 100000]
 
 
     const filter = (arr, i) => {
@@ -33,38 +39,48 @@ const OfferBlock = () => {
     }
 
 
+    const filterSlotBySlider = (arr) => {
+        //console.log(filterBySlider, arr);
+    }
+
 
     const filterSlotsBySort = (arr) => {
         let sortedrArr = [...arr];
+
         if (sortedProp === "az") {
             let sortedSlots = sortedrArr.sort((a, b) => (a.name > b.name ? 1 : -1));
+            filterSlotBySlider(sortedSlots)
             dispatch(getFillteredSlotsByHeader(sortedSlots))
         }
         if (sortedProp === "za") {
             let sortedSlots = sortedrArr.sort((a, b) => (a.name < b.name ? 1 : -1));
+            filterSlotBySlider(sortedSlots)
             dispatch(getFillteredSlotsByHeader(sortedSlots))
 
         }
         if (sortedProp === "up") {
             let sortedSlots = sortedrArr.sort((a, b) => a.price - b.price);
+            filterSlotBySlider(sortedSlots)
             dispatch(getFillteredSlotsByHeader(sortedSlots))
 
         }
         if (sortedProp === "down") {
-            // console.log("downshi", sortedrArr);
             let sortedSlots = sortedrArr.sort((a, b) => b.price - a.price);
+            filterSlotBySlider(sortedSlots)
             dispatch(getFillteredSlotsByHeader(sortedSlots))
 
 
         }
-        if (sortedProp === "" || sortedProp === undefined) {
+        if (sortedProp === "") {
             dispatch(getFillteredSlotsByHeader(arr))
+
         }
     }
 
 
 
     const filterDataById = (headerFilterId, filteredSlotsArr, sideBarFilterId, fillteredSlotsByheader) => {
+
         if (headerFilterId.length > 0) {
             let newData = filteredSlotsArr
             for (let i of headerFilterId) {
@@ -87,11 +103,11 @@ const OfferBlock = () => {
                     }
                 }))
 
-
             }
+
             filterSlotsBySort(newFilteredData)
             dispatch(getFillteredSlots(newFilteredData))
-            //dispatch(getFillteredSlotsByHeader(newFilteredData))
+
         }
 
     }
@@ -108,7 +124,7 @@ const OfferBlock = () => {
 
     useEffect(() => {
         filterDataById(headerFilterId, filteredSlots, sideBarFilterId, fillteredSlotsByheader)
-    }, [allId, sortedProp])
+    }, [allId, sortedProp, filterBySlider])
 
     const monthArray = ["იან", "თებ", "მარტ", "აპრ", "მაი", "ივნ", "ივლ", "აგვ", "სექტ", "ოქტ", "ნოე", "დეკ"]
 
@@ -122,11 +138,10 @@ const OfferBlock = () => {
 
 
     return (
-
         < div className="offer_box" >
             <div className="offer_title for_web">
                 <h3>შეთავაზებები</h3>
-                <CustomRangeSlider />
+                <CustomRangeSlider arr={currency === "GEL" ? arr1 : arr2} maxValue={currency === "GEL" ? 1000 : 100000} currency={currency} />
             </div>
             <div id="regular" className="card_box">
                 {fillteredSlotsByheader.map(item =>
