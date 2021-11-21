@@ -29,25 +29,11 @@ const OfferBlock = () => {
 
 
 
-    // const [data, setData] = useState([])
-    // const [filteredSlotsBySideBar, setFilteredSlotsBySideBar] = useState([])
-    // const [fillteredSlotsByheader, setFillteredSlotsByheader] = useState([])
-
-    useEffect(() => {
-        getList({ currency: currency }).then(res => {
-            dispatch(getDataList(res.data.data))
-            dispatch(getFillteredSlots(res.data.data))
-            dispatch(getFillteredSlotsByHeader(res.data.data))
-        });
-
-    }, [])
-
-
     // useEffect(() => {
     //     getList({ currency: currency }).then(res => {
-    //         setData(res.data.data)
-    //         setFilteredSlotsBySideBar(res.data.data)
-    //         setFillteredSlotsByheader(res.data.data)
+    //         dispatch(getDataList(res.data.data))
+    //         dispatch(getFillteredSlots(res.data.data))
+    //         dispatch(getFillteredSlotsByHeader(res.data.data))
     //     });
 
     // }, [])
@@ -65,14 +51,13 @@ const OfferBlock = () => {
 
 
     const filterSlotBySlider = (arr) => {
-        //console.log(filterBySlider, arr);
         if (filterBySlider) {
             let sortedArr = arr.filter(slot =>
                 slot.discount.new_price >= filterBySlider[0] && slot.discount.new_price <= filterBySlider[1])
             return dispatch(getFillteredSlotsByHeader(sortedArr))
         }
 
-        dispatch(getFillteredSlotsByHeader(arr)) //deleted
+        //dispatch(getFillteredSlotsByHeader(arr)) //deleted
     }
 
 
@@ -168,10 +153,10 @@ const OfferBlock = () => {
 
 
     return (
-        < div className="offer_box" >
+        <div className="offer_box" >
             <div className="offer_title for_web">
                 <h3>შეთავაზებები</h3>
-                {/* <CustomRangeSlider arr={currency === "GEL" ? arr1 : arr2} maxValue={currency === "GEL" ? 1000 : 100000} currency={currency} /> */}
+                <CustomRangeSlider arr={currency === "GEL" ? arr1 : arr2} maxValue={currency === "GEL" ? 1000 : 100000} currency={currency} />
             </div>
             <div id="regular" className="card_box">
                 {currency === "GEL" ? fillteredSlotsByheader.map(item =>

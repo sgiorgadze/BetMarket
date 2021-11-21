@@ -34,20 +34,17 @@ const Header = () => {
     const [showPriceFilterBlock, setShowPriceFilterBlock] = useState(false)
 
 
-    //const [currency, setCurrency] = useState("GEL")
-    //const sortedProp = useSelector(sortedPropSelector)
     const currency = useSelector(currencySelector)
 
-    // useEffect(() => {
-    //     console.log(currency);
-    //     getList({ currency: currency }).then(res => {
-    //         //let sortedData = res.data.data.sort((a, b) => b.price - a.price);
-    //         dispatch(getFillteredSlots(res.data.data))
-    //         dispatch(getDataList(res.data.data))
-    //         dispatch(getFillteredSlotsByHeader(res.data.data))
-    //     });
+    useEffect(() => {
+        getList({ currency: currency }).then(res => {
+            let sortedData = res.data.data.sort((a, b) => b.price - a.price);
+            dispatch(getFillteredSlots(sortedData))
+            dispatch(getDataList(res.data.data))
+            dispatch(getFillteredSlotsByHeader(res.data.data))
+        });
 
-    // }, [currency])
+    }, [currency])
 
     useEffect(() => {
         setData(getMenuList())
