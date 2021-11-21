@@ -27,6 +27,31 @@ const OfferBlock = () => {
     const arr2 = [0, 100000]
 
 
+
+
+    // const [data, setData] = useState([])
+    // const [filteredSlotsBySideBar, setFilteredSlotsBySideBar] = useState([])
+    // const [fillteredSlotsByheader, setFillteredSlotsByheader] = useState([])
+
+    useEffect(() => {
+        getList({ currency: currency }).then(res => {
+            dispatch(getDataList(res.data.data))
+            dispatch(getFillteredSlots(res.data.data))
+            dispatch(getFillteredSlotsByHeader(res.data.data))
+        });
+
+    }, [])
+
+
+    // useEffect(() => {
+    //     getList({ currency: currency }).then(res => {
+    //         setData(res.data.data)
+    //         setFilteredSlotsBySideBar(res.data.data)
+    //         setFillteredSlotsByheader(res.data.data)
+    //     });
+
+    // }, [])
+
     const filter = (arr, i) => {
         let postArr = [];
         arr.map(slot => slot.tags.map(s => {
@@ -41,43 +66,41 @@ const OfferBlock = () => {
 
     const filterSlotBySlider = (arr) => {
         //console.log(filterBySlider, arr);
-
         if (filterBySlider) {
             let sortedArr = arr.filter(slot =>
                 slot.discount.new_price >= filterBySlider[0] && slot.discount.new_price <= filterBySlider[1])
-            console.log(sortedArr);
-            dispatch(getFillteredSlotsByHeader(sortedArr))
+            return dispatch(getFillteredSlotsByHeader(sortedArr))
         }
 
-
+        dispatch(getFillteredSlotsByHeader(arr)) //deleted
     }
 
 
     const filterSlotsBySort = (arr) => {
+
         let sortedrArr = [...arr];
 
         if (sortedProp === "az") {
             let sortedSlots = sortedrArr.sort((a, b) => (a.name > b.name ? 1 : -1));
             filterSlotBySlider(sortedSlots)
-            //dispatch(getFillteredSlotsByHeader(sortedSlots))
+
         }
         if (sortedProp === "za") {
             let sortedSlots = sortedrArr.sort((a, b) => (a.name < b.name ? 1 : -1));
             filterSlotBySlider(sortedSlots)
-            //dispatch(getFillteredSlotsByHeader(sortedSlots))
+
 
         }
         if (sortedProp === "up") {
             let sortedSlots = sortedrArr.sort((a, b) => a.price - b.price);
             filterSlotBySlider(sortedSlots)
-            //dispatch(getFillteredSlotsByHeader(sortedSlots))
+
 
         }
         if (sortedProp === "down") {
-            console.log("axla");
             let sortedSlots = sortedrArr.sort((a, b) => b.price - a.price);
             filterSlotBySlider(sortedSlots)
-            // dispatch(getFillteredSlotsByHeader(sortedSlots))
+
 
 
         }
@@ -97,41 +120,37 @@ const OfferBlock = () => {
             for (let i of headerFilterId) {
                 newData = filter(newData, i)
             }
-            //dispatch(getFillteredSlotsByHeader(newData))
+            dispatch(getFillteredSlotsByHeader(newData))
             filterSlotsBySort(newData)
         } else {
+
             const newFilteredData = [];
             for (let i of sideBarFilterId) {
                 if (i === 0) {
-                    dispatch(getFillteredSlots(data))
+                    //dispatch(getFillteredSlots(data))
                     //return dispatch(getFillteredSlotsByHeader(data))                  
                     return filterSlotsBySort(data);
 
                 }
                 data.map(slot => slot.tags.map(s => {
+
                     if (s.tag_id === i) {
                         newFilteredData.push(slot)
                     }
+
                 }))
 
             }
 
-            filterSlotsBySort(newFilteredData)
             dispatch(getFillteredSlots(newFilteredData))
+            filterSlotsBySort(newFilteredData)
 
         }
 
     }
 
 
-    // useEffect(() => {
-    //     getList({ currency: currency }).then(res => {
-    //         dispatch(getFillteredSlots(res.data.data))
-    //         dispatch(getDataList(res.data.data))
-    //         dispatch(getFillteredSlotsByHeader(res.data.data))
-    //     });
 
-    // }, [])
 
     useEffect(() => {
         filterDataById(headerFilterId, filteredSlots, sideBarFilterId, fillteredSlotsByheader)
@@ -152,10 +171,10 @@ const OfferBlock = () => {
         < div className="offer_box" >
             <div className="offer_title for_web">
                 <h3>შეთავაზებები</h3>
-                <CustomRangeSlider arr={currency === "GEL" ? arr1 : arr2} maxValue={currency === "GEL" ? 1000 : 100000} currency={currency} />
+                {/* <CustomRangeSlider arr={currency === "GEL" ? arr1 : arr2} maxValue={currency === "GEL" ? 1000 : 100000} currency={currency} /> */}
             </div>
             <div id="regular" className="card_box">
-                {fillteredSlotsByheader.map(item =>
+                {currency === "GEL" ? fillteredSlotsByheader.map(item =>
                     <div key={item.id} id={item.id} data-value="1 bonus" className="card_item" style={{ backgroundImage: `url(https://staticdata.lider-bet.com/images/market/${item.id}.png)` }}>
                         <p className="sale-text" data-text={`-${item.discount.percent}%`}>
                             <span>{getTime(item)} </span>
@@ -172,7 +191,7 @@ const OfferBlock = () => {
                                 <div className="gift">აჩუქე<br /> მეგობარს</div>
                             </div>
                         </div>
-                    </div>)}
+                    </div>) : <h1>jhakjhdkj</h1>}
 
             </div>
         </div >);

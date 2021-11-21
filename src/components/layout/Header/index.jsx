@@ -38,14 +38,16 @@ const Header = () => {
     //const sortedProp = useSelector(sortedPropSelector)
     const currency = useSelector(currencySelector)
 
-    useEffect(() => {
-        getList({ currency: currency }).then(res => {
-            dispatch(getFillteredSlots(res.data.data))
-            dispatch(getDataList(res.data.data))
-            dispatch(getFillteredSlotsByHeader(res.data.data))
-        });
+    // useEffect(() => {
+    //     console.log(currency);
+    //     getList({ currency: currency }).then(res => {
+    //         //let sortedData = res.data.data.sort((a, b) => b.price - a.price);
+    //         dispatch(getFillteredSlots(res.data.data))
+    //         dispatch(getDataList(res.data.data))
+    //         dispatch(getFillteredSlotsByHeader(res.data.data))
+    //     });
 
-    }, [])
+    // }, [currency])
 
     useEffect(() => {
         setData(getMenuList())

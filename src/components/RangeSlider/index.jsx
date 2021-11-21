@@ -12,11 +12,12 @@ const CustomRangeSlider = ({ arr, maxValue, currency }) => {
 
     const [value, setValue] = useState(arr)
 
-    dispatch(getfilterBySlider(value))
+    //dispatch(getfilterBySlider(value))
 
     useEffect(() => {
         setValue(arr)
     }, arr)
+
 
 
     const handleChange = (event, newValue) => {
