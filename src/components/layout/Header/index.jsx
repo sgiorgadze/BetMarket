@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, forwardRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useOutsideClick } from '../../../hooks/useEvents';
@@ -35,6 +35,7 @@ const Header = () => {
     const [showPriceFilterBlock, setShowPriceFilterBlock] = useState(false)
 
     const [showSideBar, setShowSideBar] = useState(false)
+    const [selectValue, setSelectValue] = useState("all")
 
 
     const currency = useSelector(currencySelector)
@@ -58,6 +59,7 @@ const Header = () => {
 
     useOutsideClick(optionsRef, () => {
         setShowPriceFilterBlock(false);
+        setShowSideBar(false)
     });
 
     const checkMenuItem = (item) => {
@@ -70,16 +72,24 @@ const Header = () => {
         setData(newdata);
     }
 
-    const filterSlotsData = (item) => {
+    const filterSlotsData = (id) => {
         let filterData = [];
-        data.map(d => {
-            if (d.isChecked) {
-                filterData.push(d.id)
-            }
-        })
+
+        if (id.target.value === "all") {
+            return dispatch(filterHeaderMenuAction(filterSidebarMenu(filterData)));
+        }
+        if (id) {
+            filterData.push(Number(id.target.value))
+        } else {
+            data.map(d => {
+                if (d.isChecked) {
+                    filterData.push(d.id)
+                }
+            })
+        }
+
         dispatch(filterHeaderMenuAction(filterSidebarMenu(filterData)));
     }
-
 
     const handleSwitchBtn = (name) => {
         if (name === "GEL") {
@@ -104,7 +114,9 @@ const Header = () => {
         setShowPriceFilterBlock(!showPriceFilterBlock)
     }
 
-    console.log(showSideBar);
+    const handleSelect = (e) => {
+        setSelectValue(e.target.value)
+    }
 
     return (
         <>
@@ -116,7 +128,7 @@ const Header = () => {
             </ul>
             {size.width <= 1001 && <div className={showSideBar ? "overlay_wrapper show" : "overlay_wrapper"}>
 
-                <Sidebar />
+                <Sidebar forwardRef={optionsRef} />
                 <div className="overlay"></div>
             </div>}
 
@@ -126,7 +138,7 @@ const Header = () => {
                     <li id={item.id} key={item.id}
                         onClick={() => {
                             checkMenuItem(item);
-                            filterSlotsData(item)
+                            filterSlotsData()
                         }}
                         className={item.isChecked ? "sort_li section_nav_item for_web active " : "sort_li section_nav_item for_web "}
                     >
@@ -141,8 +153,8 @@ const Header = () => {
                     <span data-currency="GEL" className="switch_item">ლარი</span>
                 </li>
                 <li id="select-box" className=" section_nav_item custom-select for-mob">
-                    <select className="custom-section">
-                        <option value="all" selected="">ყველა</option>
+                    <select className="custom-section" onChange={(e) => (handleSelect(e), filterSlotsData(e))} value={selectValue}>
+                        <option value="all" >ყველა</option>
                         <option value="29">TOP</option>
                         <option value="30">ფასდაკლება</option>
                         <option value="31">ბონუსი</option>

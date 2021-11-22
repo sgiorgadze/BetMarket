@@ -175,7 +175,7 @@ i {
         justify-content: flex-start;
         @media (max-width: 340px) {
           flex: 0;
-          margin: 0 10px 0 0;
+          margin: 0 5px 0 0;
         }
       }
       span {
@@ -224,6 +224,9 @@ i {
       border-radius: 0.25em;
       @media (max-width: 1000px) {
         display: block;
+      }
+      @media (max-width: 320px) {
+        margin: 0 7px 0 3px;
       }
       .custom-section {
         flex: 1;
@@ -412,8 +415,6 @@ i {
   z-index: 199;
   height: 100%;
   width: 230px;
-  //display: none;
-  //transition: all 0.2s ease-in;
   transform: translateX(-100%);
   width: 100%;
   .sidebar {
@@ -421,7 +422,6 @@ i {
     transform: translateX(-100%);
   }
   &.show {
-    //display: block;
     transform: translateX(0%);
     .overlay {
       transform: translateX(0%);
@@ -441,7 +441,6 @@ i {
     top: 0;
     z-index: 198;
     height: 100%;
-    //display: none;
     transform: translateX(-100%);
   }
 }
