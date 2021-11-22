@@ -12,6 +12,7 @@ import FilterByPriceBlock from "./FilterByPriceBlock"
 import { getMenuList } from "../../../data/MenuList"
 
 import { getList } from "../../../core/store/actions/slots"
+import Sidebar from '../SideBar';
 
 
 import "./header.scss"
@@ -32,6 +33,8 @@ const Header = () => {
     const [switchBtn, setSwitchBtn] = useState("GEL")
     const [priceFilterData, setPriceFilterData] = useState("down")
     const [showPriceFilterBlock, setShowPriceFilterBlock] = useState(false)
+
+    const [showSideBar, setShowSideBar] = useState(false)
 
 
     const currency = useSelector(currencySelector)
@@ -101,14 +104,22 @@ const Header = () => {
         setShowPriceFilterBlock(!showPriceFilterBlock)
     }
 
+    console.log(showSideBar);
+
     return (
         <>
             <ul className="main_section_nav for-mob">
-                <li className="mob-menu-btn for-mob">მენიუ</li>
+                <li className="mob-menu-btn for-mob" onClick={() => setShowSideBar(true)}>მენიუ</li>
                 <li className="section_nav_item mob-search search " data-info="ძებნა">
                     <input id="search1" autoComplete="off" type="search" />
                 </li>
             </ul>
+            {size.width <= 1001 && <div className={showSideBar ? "overlay_wrapper show" : "overlay_wrapper"}>
+
+                <Sidebar />
+                <div className="overlay"></div>
+            </div>}
+
 
             <ul className="main_section_nav">
                 {size.width >= 1001 && (data.map(item =>

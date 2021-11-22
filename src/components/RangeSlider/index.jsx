@@ -57,9 +57,17 @@ const CustomRangeSlider = ({ arr, maxValue, currency }) => {
             boxShadow: "inset 0 0 1px #fff, inset 0 1px 7px #ebebeb, 0 3px 6px -3px #bbb;"
 
         },
+        // '& .css-1v7836g-MuiSlider-root': {
+        //     padding: "20px"
+
+        // },
+
 
         height: "8px",
         color: '#63738e',
+        padding: "0px !important"
+
+
     }
 
 

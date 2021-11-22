@@ -51,10 +51,19 @@ const OfferBlock = () => {
 
 
     const filterSlotBySlider = (arr) => {
+
         if (filterBySlider) {
-            let sortedArr = arr.filter(slot =>
-                slot.discount.new_price >= filterBySlider[0] && slot.discount.new_price <= filterBySlider[1])
-            return dispatch(getFillteredSlotsByHeader(sortedArr))
+
+            if (currency === "GEL") {
+                let sortedArr = arr.filter(slot =>
+                    slot.discount.new_price >= filterBySlider[0] && slot.discount.new_price <= filterBySlider[1])
+                return dispatch(getFillteredSlotsByHeader(sortedArr))
+            } else {
+                let sortedArr = arr.filter(slot =>
+                    slot.price >= filterBySlider[0] && slot.price <= filterBySlider[1])
+                return dispatch(getFillteredSlotsByHeader(sortedArr))
+            }
+
         }
 
         //dispatch(getFillteredSlotsByHeader(arr)) //deleted
@@ -62,7 +71,6 @@ const OfferBlock = () => {
 
 
     const filterSlotsBySort = (arr) => {
-
         let sortedrArr = [...arr];
 
         if (sortedProp === "az") {
@@ -83,6 +91,7 @@ const OfferBlock = () => {
 
         }
         if (sortedProp === "down") {
+
             let sortedSlots = sortedrArr.sort((a, b) => b.price - a.price);
             filterSlotBySlider(sortedSlots)
 
@@ -90,6 +99,7 @@ const OfferBlock = () => {
 
         }
         if (sortedProp === "") {
+            console.log("araferS");
             filterSlotBySlider(arr)
             //dispatch(getFillteredSlotsByHeader(arr))
 
@@ -117,11 +127,12 @@ const OfferBlock = () => {
                     return filterSlotsBySort(data);
 
                 }
-                data.map(slot => slot.tags.map(s => {
 
+                data.map(slot => slot.tags.map(s => {
                     if (s.tag_id === i) {
                         newFilteredData.push(slot)
                     }
+
 
                 }))
 
@@ -139,7 +150,7 @@ const OfferBlock = () => {
 
     useEffect(() => {
         filterDataById(headerFilterId, filteredSlots, sideBarFilterId, fillteredSlotsByheader)
-    }, [allId, sortedProp, filterBySlider])
+    }, [allId, sortedProp, filterBySlider, data])
 
     const monthArray = ["იან", "თებ", "მარტ", "აპრ", "მაი", "ივნ", "ივლ", "აგვ", "სექტ", "ოქტ", "ნოე", "დეკ"]
 
@@ -176,7 +187,21 @@ const OfferBlock = () => {
                                 <div className="gift">აჩუქე<br /> მეგობარს</div>
                             </div>
                         </div>
-                    </div>) : <h1>jhakjhdkj</h1>}
+                    </div>) : fillteredSlotsByheader.map(item =>
+                        <div key={item.id} id={item.id} data-value="1 bonus" className="card_item" style={{ backgroundImage: `url(https://staticdata.lider-bet.com/images/market/${item.id}.png)` }}>
+                            <div>
+                                <p className="card-title1">{item.name} </p>
+                                <p className="card-desc">{item.desc} </p>
+                                <p className="card-price" data-text={item.name}>
+                                    <span>{Math.floor(`${item.price}`)} POINTS </span>
+                                    {/* <span className="on" data-text={`-${item.discount.percent}%`}>{item.price} GEL </span> */}
+                                </p>
+                                <div className="card-btns">
+                                    <div className="buy">შეძენა</div>
+                                    <div className="gift">აჩუქე<br /> მეგობარს</div>
+                                </div>
+                            </div>
+                        </div>)}
 
             </div>
         </div >);
