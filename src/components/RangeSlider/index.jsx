@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Slider from '@mui/material/Slider';
-import Typography from '@mui/material/Typography';
+//import Typography from '@mui/material/Typography';
 import { getfilterBySlider } from "../../core/store/dataSlice"
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 
 

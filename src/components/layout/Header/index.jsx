@@ -1,10 +1,10 @@
-import React, { useState, useRef, useEffect, forwardRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useOutsideClick } from '../../../hooks/useEvents';
 import { useWindowSize } from '../../../hooks/useWindowSize';
 
-import { slotsFilterSelector, SlotsByHeaderSelector, allIdSelector, sortedPropSelector, currencySelector } from "../../../core/store/selectors"
+import { currencySelector } from "../../../core/store/selectors"
 import { getDataList, getFillteredSlots, filterHeaderMenuAction, getCurrency, getFillteredSlotsByHeader, getSortedProp } from "../../../core/store/dataSlice"
 import { filterSidebarMenu } from "../../../utils/common"
 
@@ -58,8 +58,9 @@ const Header = () => {
 
 
     useOutsideClick(optionsRef, () => {
+        console.log("outs");
         setShowPriceFilterBlock(false);
-        setShowSideBar(false)
+        //setShowSideBar(false)
     });
 
     const checkMenuItem = (item) => {
@@ -75,10 +76,10 @@ const Header = () => {
     const filterSlotsData = (id) => {
         let filterData = [];
 
-        if (id.target.value === "all") {
-            return dispatch(filterHeaderMenuAction(filterSidebarMenu(filterData)));
-        }
         if (id) {
+            if (id.target.value === "all") {
+                return dispatch(filterHeaderMenuAction(filterSidebarMenu(filterData)));
+            }
             filterData.push(Number(id.target.value))
         } else {
             data.map(d => {
@@ -128,7 +129,7 @@ const Header = () => {
             </ul>
             {size.width <= 1001 && <div className={showSideBar ? "overlay_wrapper show" : "overlay_wrapper"}>
 
-                <Sidebar forwardRef={optionsRef} />
+                <Sidebar />
                 <div className="overlay"></div>
             </div>}
 

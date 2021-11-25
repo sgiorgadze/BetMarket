@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import CustomRangeSlider from "../RangeSlider"
 import { useDispatch, useSelector } from 'react-redux';
 
 import { slotsDataSelector, slotsFilterSelector, sideBarIdSelector, headerIdSelector, allIdSelector, currencySelector, SlotsByHeaderSelector, sortedPropSelector, filterBySliderSelector } from "../../core/store/selectors"
-import { getDataList, getCurrency, getFillteredSlots, getFillteredSlotsByHeader } from "../../core/store/dataSlice"
-import { getList } from "../../core/store/actions/slots"
+import { getFillteredSlots, getFillteredSlotsByHeader } from "../../core/store/dataSlice"
+
 
 import "./offerBlock.scss"
 
