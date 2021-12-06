@@ -60,7 +60,7 @@ const Header = () => {
     useOutsideClick(optionsRef, () => {
         console.log("outs");
         setShowPriceFilterBlock(false);
-        //setShowSideBar(false)
+        setShowSideBar(false)
     });
 
     const checkMenuItem = (item) => {
@@ -129,7 +129,7 @@ const Header = () => {
             </ul>
             {size.width <= 1001 && <div className={showSideBar ? "overlay_wrapper show" : "overlay_wrapper"}>
 
-                <Sidebar />
+                <Sidebar ref={optionsRef} />
                 <div className="overlay"></div>
             </div>}
 

@@ -9,7 +9,7 @@ import { getSideBarList } from "../../../data/SideBarList"
 import "./sidebar.scss"
 
 
-const Sidebar = () => {
+const Sidebar = React.forwardRef((props, ref) => {
     const dispatch = useDispatch()
     const [selectedItem, setSelectedItem] = useState("")
     const [checkedCount, setCheckedCount] = useState(0)
@@ -138,6 +138,6 @@ const Sidebar = () => {
 
         </section >
     );
-}
+})
 
 export default Sidebar;
